@@ -1,0 +1,78 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:all",
+        "tslint-sonarts",
+        "tslint-plugin-prettier",
+        "tslint-config-prettier"
+    ],
+    "rules": {
+        "prettier": true,
+        "typedef": [
+            true,
+            "call-signature",
+            "arrow-call-signature",
+            "parameter",
+            "arrow-parameter",
+            "property-declaration",
+            "member-variable-declaration",
+            "object-destructuring",
+            "array-destructuring"
+        ],
+        "file-name-casing": [
+            true,
+            {
+                "index.ts": "camel-case",
+                ".ts": "pascal-case"
+            }
+        ],
+        "variable-name": [
+            true,
+            "check-format",
+            "allow-pascal-case",
+            "allow-leading-underscore",
+            "ban-keywords"
+        ],
+        "no-import-side-effect": [
+            true,
+            {
+                "ignore-module": "reflect-metadata"
+            }
+        ],
+        "completed-docs": false,
+        "prefer-function-over-method": false,
+        "no-default-import": true,
+        "no-implicit-dependencies": [
+            true,
+            "dev",
+            [
+                "Auth",
+                "Consumer",
+                "Invoice",
+                "Shared",
+                "Faker",
+                "Partner",
+                "index.ts"
+            ]
+        ],
+        "no-null-keyword": false,
+        "no-null-undefined-union": false,
+        "no-unsafe-any": false,
+        "newline-per-chained-call": false,
+        "ordered-imports": true,
+        "no-submodule-imports": false,
+        "ban-ts-ignore": false,
+        "no-use-before-declare": false,
+        "strict-comparisons": false,
+        "no-unnecessary-class": false
+    },
+    "linterOptions": {
+        "exclude": [
+            "**/*.js"
+        ],
+        "baseUrl": [
+            "Src",
+            "Test"
+        ]
+    }
+}

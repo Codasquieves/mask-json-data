@@ -1,0 +1,71 @@
+{
+  "name": "mask-data",
+  "version": "1.0.0",
+  "description": "Lib to mask object with sensive values",
+  "main": "index.js",
+  "scripts": {
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "tsc -p .",
+    "test": "mocha --config .mocharc.yaml 'Test/**/*.spec.ts'",
+    "test:watch": "npm run test -- -w",
+    "test:local": "TS_NODE_TRANSPILE_ONLY=true npm run test",
+    "test:coverage": "nyc npm run test"
+  },
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "engineStrict": true,
+  "keywords": [
+    "mask",
+    "sensive",
+    "json-data",
+    "mask-json"
+  ],
+  "author": "Ivan Codasquieves",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.5",
+    "chai": "^4.2.0",
+    "husky": "^4.2.5",
+    "mocha": "^7.2.0",
+    "nyc": "^15.0.1",
+    "prettier": "^2.0.5",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "tslint-sonarts": "^1.9.0",
+    "typescript": "^3.9.3"
+  },
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "per-file": false,
+    "statements": 0,
+    "branches": 0,
+    "functions": 0,
+    "lines": 0,
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "Src"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "report-dir": "./Coverage"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run test"
+    }
+  }
+}
