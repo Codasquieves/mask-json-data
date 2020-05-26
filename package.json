@@ -9,7 +9,6 @@
     "build": "tsc -p .",
     "test": "mocha --config .mocharc.yaml 'Test/**/*.spec.ts'",
     "test:watch": "npm run test -- -w",
-    "test:local": "TS_NODE_TRANSPILE_ONLY=true npm run test",
     "test:coverage": "nyc npm run test"
   },
   "engines": {
@@ -33,6 +32,7 @@
     "mocha": "^7.2.0",
     "nyc": "^15.0.1",
     "prettier": "^2.0.5",
+    "ts-node": "^8.10.1",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
@@ -43,10 +43,10 @@
     "all": true,
     "check-coverage": true,
     "per-file": false,
-    "statements": 0,
-    "branches": 0,
-    "functions": 0,
-    "lines": 0,
+    "statements": 98,
+    "branches": 90,
+    "functions": 100,
+    "lines": 98,
     "extension": [
       ".ts"
     ],

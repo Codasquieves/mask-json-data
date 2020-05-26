@@ -1,4 +1,5 @@
 import { assert } from "chai";
+import { IRule } from "../Src/Contracts/IRule";
 import { Mask } from "../Src/Mask";
 import { Runner } from "../Src/Runner";
 
@@ -250,6 +251,33 @@ describe("Runner", (): void => {
             value: "*number*",
           },
         ],
+      });
+    });
+  });
+
+  describe("Custom rule", (): void => {
+    it("Should apply custom rule", (): void => {
+      class Sensitive implements IRule {
+        // tslint:disable-next-line: no-any
+        public execute(_value: any): string {
+          return "*sensitive*";
+        }
+      }
+
+      const userSchema = {
+        password: new Sensitive(),
+      };
+
+      const user = {
+        password: "Password",
+        userName: "UserName",
+      };
+
+      const result = Runner.Apply(user, userSchema);
+
+      assert.deepEqual(result, {
+        password: "*sensitive*",
+        userName: "UserName",
       });
     });
   });

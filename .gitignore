@@ -2,3 +2,4 @@
 /Coverage
 yarn.lock
 /.nyc_output
+/dist
