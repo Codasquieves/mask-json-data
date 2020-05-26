@@ -4,15 +4,9 @@ import { Runner } from "../../Src/Runner";
 
 // tslint:disable: no-magic-numbers
 describe("Rules: ShowFirts", (): void => {
-  let runner: Runner;
-
-  before((): void => {
-    const schema = {
-      paragraph: Mask().ShowFirst(3),
-    };
-
-    runner = new Runner(schema);
-  });
+  const schema = {
+    paragraph: Mask.ShowFirst(3),
+  };
 
   it("Should mask a string value", (): void => {
     // Given
@@ -21,7 +15,7 @@ describe("Rules: ShowFirts", (): void => {
     };
 
     // When
-    const result = runner.Apply(text);
+    const result = Runner.Apply(text, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -36,7 +30,7 @@ describe("Rules: ShowFirts", (): void => {
     };
 
     // When
-    const result = runner.Apply(text);
+    const result = Runner.Apply(text, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -51,7 +45,7 @@ describe("Rules: ShowFirts", (): void => {
     };
 
     // When
-    const result = runner.Apply(text);
+    const result = Runner.Apply(text, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -66,7 +60,7 @@ describe("Rules: ShowFirts", (): void => {
     };
 
     // When
-    const result = runner.Apply(text);
+    const result = Runner.Apply(text, schema);
 
     // Then
     assert.deepEqual(result, {

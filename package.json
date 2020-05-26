@@ -1,5 +1,5 @@
 {
-  "name": "mask-data",
+  "name": "mask-json-data",
   "version": "1.0.0",
   "description": "Lib to mask object with sensive values",
   "main": "index.js",

@@ -1,7 +1,7 @@
-import { MaskRules } from "../Mask";
+import { IRule } from "./IRule";
 
 interface IMaskSchema {
-  [key: string]: MaskRules | undefined;
+  [key: string]: IRule | undefined | object;
 }
 
 export { IMaskSchema };

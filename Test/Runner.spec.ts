@@ -2,18 +2,12 @@ import { assert } from "chai";
 import { Mask } from "../Src/Mask";
 import { Runner } from "../Src/Runner";
 
-// tslint:disable: no-magic-numbers no-big-function
-describe.only("Runner", (): void => {
-  let runner: Runner;
-
-  before((): void => {
-    const schema = {
-      document: Mask().All(),
-      numbers: Mask().All(),
-    };
-
-    runner = new Runner(schema);
-  });
+// tslint:disable: no-magic-numbers no-big-function no-duplicate-string no-hardcoded-credentials
+describe("Runner", (): void => {
+  const schema = {
+    document: Mask.All(),
+    numbers: Mask.All(),
+  };
 
   describe("Simple object", (): void => {
     it("Should mask null property", (): void => {
@@ -23,7 +17,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, schema);
 
       // Then
       assert.deepEqual(result, {
@@ -38,7 +32,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, schema);
 
       // Then
       assert.deepEqual(result, {
@@ -54,7 +48,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, schema);
 
       // Then
       assert.deepEqual(result, {
@@ -67,6 +61,15 @@ describe.only("Runner", (): void => {
   describe("Composite object", (): void => {
     it("Should mask composite object", (): void => {
       // Given
+      const documentSchema = {
+        document: {
+          number: Mask.All(),
+          type: {
+            description: Mask.All(),
+          },
+        },
+      };
+
       const person = {
         document: {
           number: 10000,
@@ -78,7 +81,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, documentSchema);
 
       // Then
       assert.deepEqual(result, {
@@ -101,7 +104,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, schema);
 
       // Then
       assert.deepEqual(result, {
@@ -113,6 +116,13 @@ describe.only("Runner", (): void => {
 
     it("Should pase array of objects property", (): void => {
       // Given
+      const documentSchema = {
+        document: {
+          number: Mask.All(),
+          type: Mask.All(),
+        },
+      };
+
       const person = {
         document: [
           {
@@ -124,7 +134,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = runner.Apply(person);
+      const result = Runner.Apply(person, documentSchema);
 
       // Then
       assert.deepEqual(result, {
@@ -140,25 +150,31 @@ describe.only("Runner", (): void => {
   });
 
   describe("person", (): void => {
-    let personRuner: Runner;
-
-    before((): void => {
-      const schema = {
-        email: Mask().All(),
-        fullName: Mask().FullName(),
-        neighborhood: Mask().ShowLast(4),
-        number: Mask().Number(),
-        obs: Mask().Regex(/\s/g),
-        password: Mask().All(),
-        secondaryEmail: Mask().Email(),
-        streetName: Mask().ShowFirst(3),
-        tags: Mask().ShowFirst(1),
-        temperature: Mask().ShowFirst(1),
-        value: Mask().Number(),
-      };
-
-      personRuner = new Runner(schema);
-    });
+    const personSchema = {
+      address: {
+        neighborhood: Mask.ShowLast(4),
+        number: Mask.Number(),
+        streetName: Mask.ShowFirst(3),
+      },
+      email: Mask.All(),
+      fullName: Mask.FullName(),
+      obs: Mask.Regex(/\s/g),
+      others: {
+        anothers: {
+          day: {
+            name: Mask.Email(),
+          },
+          lastUpdated: Mask.All(),
+        },
+      },
+      password: Mask.All(),
+      secondaryEmail: Mask.Email(),
+      tags: Mask.ShowFirst(1),
+      temperature: {
+        type: Mask.ShowFirst(1),
+        value: Mask.Number(),
+      },
+    };
 
     it("Should mask person", (): void => {
       // Given
@@ -173,7 +189,15 @@ describe.only("Runner", (): void => {
         email: "test@email.com",
         fullName: "Sylvester Stallone",
         obs: "    ",
-        // tslint:disable-next-line: no-hardcoded-credentials
+        others: {
+          anothers: {
+            day: {
+              code: "908234",
+              name: "*invalid_email*",
+            },
+            lastUpdated: "2020-05-20 00:00:00",
+          },
+        },
         password: "Pass@*word",
         secondaryEmail: "test2email.com",
         tags: ["day", "collor", "dark"],
@@ -190,7 +214,7 @@ describe.only("Runner", (): void => {
       };
 
       // When
-      const result = personRuner.Apply(person);
+      const result = Runner.Apply(person, personSchema);
 
       // Then
       assert.deepEqual(result, {
@@ -204,7 +228,15 @@ describe.only("Runner", (): void => {
         email: "**************",
         fullName: "Syl************one",
         obs: "****",
-        // tslint:disable-next-line: no-hardcoded-credentials
+        others: {
+          anothers: {
+            day: {
+              code: "908234",
+              name: "*invalid_email*",
+            },
+            lastUpdated: "*******************",
+          },
+        },
         password: "**********",
         secondaryEmail: "*invalid_email*",
         tags: ["d**", "c*****", "d***"],

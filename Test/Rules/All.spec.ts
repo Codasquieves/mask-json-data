@@ -4,15 +4,9 @@ import { Runner } from "../../Src/Runner";
 
 // tslint:disable: no-magic-numbers
 describe("Rules: All", (): void => {
-  let runner: Runner;
-
-  before((): void => {
-    const schema = {
-      document: Mask().All(),
-    };
-
-    runner = new Runner(schema);
-  });
+  const schema = {
+    document: Mask.All(),
+  };
 
   it("Should mask a string value", (): void => {
     // Given
@@ -21,7 +15,7 @@ describe("Rules: All", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -36,7 +30,7 @@ describe("Rules: All", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -51,7 +45,7 @@ describe("Rules: All", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -66,7 +60,7 @@ describe("Rules: All", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -82,7 +76,7 @@ describe("Rules: All", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -92,31 +86,40 @@ describe("Rules: All", (): void => {
   });
 
   it("Should mask an object", (): void => {
+    const moneySchema = {
+      values: {
+        currency: Mask.All(),
+        value: {
+          currency: Mask.All(),
+          value: Mask.All(),
+        },
+      },
+    };
     // Given
-    const person = {
-      document: {
+    const money = {
+      datetime: "2020-05-25 00:00:00",
+      values: {
         currency: "R$",
         value: {
           currency: "R$",
           value: "1000",
         },
       },
-      value: 100,
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(money, moneySchema);
 
     // Then
     assert.deepEqual(result, {
-      document: {
+      datetime: "2020-05-25 00:00:00",
+      values: {
         currency: "**",
         value: {
           currency: "**",
           value: "****",
         },
       },
-      value: 100,
     });
   });
 });

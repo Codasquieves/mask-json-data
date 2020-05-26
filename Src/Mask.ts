@@ -8,67 +8,34 @@ import { Regex } from "./Rules/Regex";
 import { ShowFirst } from "./Rules/ShowFirst";
 import { ShowLast } from "./Rules/ShowLast";
 
-class MaskRules {
-  private readonly rules: IRule[];
-
-  public constructor() {
-    this.rules = [];
+class Mask {
+  public static All(): IRule {
+    return new All();
   }
 
-  public All(): MaskRules {
-    this.rules.push(new All());
-
-    return this;
+  public static Email(): IRule {
+    return new Email();
   }
 
-  public Email(): MaskRules {
-    this.rules.push(new Email());
-
-    return this;
+  public static FullName(): IRule {
+    return new FullName();
   }
 
-  // tslint:disable-next-line: no-any
-  public execute(value?: any): string {
-    let newValue = "";
-
-    for (const rule of this.rules) {
-      newValue = rule.execute(value);
-    }
-
-    return newValue;
+  public static Number(): IRule {
+    return new NumberRule();
   }
 
-  public FullName(): MaskRules {
-    this.rules.push(new FullName());
-
-    return this;
+  public static Regex(pattern: RegExp): IRule {
+    return new Regex(pattern);
   }
 
-  public Number(): MaskRules {
-    this.rules.push(new NumberRule());
-
-    return this;
+  public static ShowFirst(size: number): IRule {
+    return new ShowFirst(size);
   }
 
-  public Regex(pattern: RegExp): MaskRules {
-    this.rules.push(new Regex(pattern));
-
-    return this;
-  }
-
-  public ShowFirst(size: number): MaskRules {
-    this.rules.push(new ShowFirst(size));
-
-    return this;
-  }
-
-  public ShowLast(size: number): MaskRules {
-    this.rules.push(new ShowLast(size));
-
-    return this;
+  public static ShowLast(size: number): IRule {
+    return new ShowLast(size);
   }
 }
 
-const Mask = (): MaskRules => new MaskRules();
-
-export { Mask, MaskRules };
+export { Mask };

@@ -4,14 +4,9 @@ import { IsArray } from "./Utils/IsArray";
 import { IsNullOrUndefined } from "./Utils/IsNullOrUndefined";
 import { IsObject } from "./Utils/IsObject";
 
+// tslint:disable: no-any
 class Runner {
-  private readonly schema: IMaskSchema;
-
-  public constructor(schema: IMaskSchema) {
-    this.schema = schema;
-  }
-
-  public Apply(data: object): object {
+  public static Apply(data: object, schema: IMaskSchema): object {
     const copyData = { ...data };
 
     const keys = Object.keys(copyData);
@@ -20,46 +15,37 @@ class Runner {
 
     for (const key of keys) {
       const value = copyData[key];
-      const rule = this.schema[key];
+      const rule = schema[key];
 
-      newObject[key] = this.mask(value, rule);
+      newObject[key] = Runner.Mask(value, rule);
     }
 
     return newObject;
   }
 
-  // tslint:disable-next-line: no-any
-  private mask(data: any, rule?: IRule): any {
+  private static Mask(data: object, rule: IRule | undefined | object): any {
+    if (IsNullOrUndefined(data) || IsNullOrUndefined(rule)) {
+      return data;
+    }
+
+    if (!IsNullOrUndefined(rule) && !IsObject(data)) {
+      return (rule as IRule).execute(data);
+    }
+
     if (IsArray(data)) {
-      return data.map((item: object): object => this.mask(item, rule));
+      return (data as []).map((item: object): any => Runner.Mask(item, rule));
     }
 
-    if (IsNullOrUndefined(data)) {
-      return data;
-    }
+    const newObject = {};
 
-    if (!IsObject(data)) {
-      if (!IsNullOrUndefined(rule)) {
-        return rule?.execute(data);
-      }
-
-      return data;
-    }
-
-    const keys = Object.keys(data);
-
-    const result = {};
-
-    for (const key of keys) {
+    for (const key of Object.keys(data)) {
+      const newRule = (rule as object)[key];
       const value = data[key];
 
-      const newRule = this.schema[key];
-
-      // tslint:disable-next-line: strict-boolean-expressions
-      result[key] = this.mask(value, newRule || rule);
+      newObject[key] = Runner.Mask(value, newRule);
     }
 
-    return result;
+    return newObject;
   }
 }
 

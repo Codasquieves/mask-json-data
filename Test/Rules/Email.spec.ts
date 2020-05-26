@@ -4,15 +4,9 @@ import { Runner } from "../../Src/Runner";
 
 // tslint:disable: no-identical-functions
 describe("Rules: Email", (): void => {
-  let runner: Runner;
-
-  before((): void => {
-    const schema = {
-      email: Mask().Email(),
-    };
-
-    runner = new Runner(schema);
-  });
+  const schema = {
+    email: Mask.Email(),
+  };
 
   it("Should mask a valid email", (): void => {
     // Given
@@ -21,7 +15,7 @@ describe("Rules: Email", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -36,7 +30,7 @@ describe("Rules: Email", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -51,7 +45,7 @@ describe("Rules: Email", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -66,7 +60,7 @@ describe("Rules: Email", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
@@ -81,7 +75,7 @@ describe("Rules: Email", (): void => {
     };
 
     // When
-    const result = runner.Apply(person);
+    const result = Runner.Apply(person, schema);
 
     // Then
     assert.deepEqual(result, {
